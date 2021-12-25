@@ -1,5 +1,6 @@
 package com.zdk.service.serviceImpl;
 
+import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zdk.model.CheckInfo;
@@ -28,6 +29,9 @@ public class CheckInfoServiceImpl extends ServiceImpl<CheckInfoMapper, CheckInfo
         String keywords = pageDto.getKeywords();
         PageHelper.startPage(pageNumber, pageSize);
         List<CheckInfo> checkInfoList;
+        if (StringUtils.isBlank(pageDto.getDate())){
+            pageDto.setDate(DateUtil.now());
+        }
         if (loginUser != null){
             checkInfoList = lambdaQuery().eq("普通用户".equals(loginUser.getRole()),CheckInfo::getStaffId,loginUser.getId())
                     .like(CheckInfo::getCheckTime,pageDto.getDate().substring(0, 11))
