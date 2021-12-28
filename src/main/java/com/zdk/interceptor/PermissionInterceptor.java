@@ -29,7 +29,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
         if(request.getMethod().equals("options")){
             return true;
         }
-        List<Permission> permissions= (List<Permission>) request.getSession().getAttribute("functions");
+        List<Permission> permissions= (List<Permission>) request.getSession().getAttribute("permissions");
         User user= (User) request.getSession().getAttribute("loginUser");
         if(user != null && permissions !=null){
             if(handler instanceof HandlerMethod){
@@ -59,6 +59,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
             }
         }
         try {
+            response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(JSONUtil.parseObj(ApiResponse.failWidthDiyCode(403,"无权访问")).toString());
         } catch (IOException e) {
             e.printStackTrace();

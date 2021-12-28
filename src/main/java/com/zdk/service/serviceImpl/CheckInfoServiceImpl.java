@@ -8,10 +8,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zdk.mapper.CheckInfoMapper;
 import com.zdk.model.CheckInfo;
+import com.zdk.model.Setting;
 import com.zdk.model.User;
 import com.zdk.model.dto.ClockInDto;
 import com.zdk.model.dto.PageDto;
 import com.zdk.service.CheckInfoService;
+import com.zdk.service.SettingService;
 import com.zdk.service.UserService;
 import com.zdk.utils.ApiResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +32,8 @@ public class CheckInfoServiceImpl extends ServiceImpl<CheckInfoMapper, CheckInfo
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private SettingService settingService;
 
     @Override
     public PageInfo<CheckInfo> getCheckInfoPage(PageDto pageDto, User loginUser) {
@@ -83,18 +87,36 @@ public class CheckInfoServiceImpl extends ServiceImpl<CheckInfoMapper, CheckInfo
                 .set(StringUtils.isNotBlank(checkTime),CheckInfo::getCheckTime,checkTime)
                 .set(StringUtils.isNotBlank(leaveTime),CheckInfo::getLeaveTime,leaveTime);
         if (StringUtils.isNotBlank(checkTime)){
-            DateTime checkDateTime = DateUtil.parseDate(checkTime);
-            if (checkDateTime.getHours()>9){
+            Setting workTime = settingService.lambdaQuery().eq(Setting::getSettingName, "workTime").one();
+            String workTimeSettingValue = workTime.getSettingValue();
+            DateTime checkDateTime = DateUtil.parse(checkTime);
+            DateTime workTimeSetting = DateUtil.parse(workTimeSettingValue, "HH:mm");
+            if (checkDateTime.getHours()>workTimeSetting.getHours()){
                 lambdaUpdate.set(CheckInfo::getIsLate, true);
-            }else {
+            }else if (checkDateTime.getHours()==workTimeSetting.getHours()){
+                if (checkDateTime.getMinutes()>workTimeSetting.getMinutes()){
+                    lambdaUpdate.set(CheckInfo::getIsLate, true);
+                }else{
+                    lambdaUpdate.set(CheckInfo::getIsLate, false);
+                }
+            }else{
                 lambdaUpdate.set(CheckInfo::getIsLate, false);
             }
         }
         if (StringUtils.isNotBlank(leaveTime)){
-            DateTime leaveDateTime = DateUtil.parseDate(leaveTime);
-            if (leaveDateTime.getHours()<21){
+            Setting workTime = settingService.lambdaQuery().eq(Setting::getSettingName, "closingTime").one();
+            String closingTimeSettingValue = workTime.getSettingValue();
+            DateTime leaveDateTime = DateUtil.parse(leaveTime);
+            DateTime closingTimeSetting = DateUtil.parse(closingTimeSettingValue, "HH:mm");
+            if (leaveDateTime.getHours()<closingTimeSetting.getHours()){
                 lambdaUpdate.set(CheckInfo::getIsLeaveEarly, true);
-            }else {
+            }else if (leaveDateTime.getHours()==closingTimeSetting.getHours()){
+                if (leaveDateTime.getMinutes()<closingTimeSetting.getMinutes()){
+                    lambdaUpdate.set(CheckInfo::getIsLeaveEarly, true);
+                }else{
+                    lambdaUpdate.set(CheckInfo::getIsLeaveEarly, false);
+                }
+            }else{
                 lambdaUpdate.set(CheckInfo::getIsLeaveEarly, false);
             }
         }
@@ -114,18 +136,36 @@ public class CheckInfoServiceImpl extends ServiceImpl<CheckInfoMapper, CheckInfo
                 .set(StringUtils.isNotBlank(checkTime),CheckInfo::getCheckTime,checkTime)
                 .set(StringUtils.isNotBlank(leaveTime),CheckInfo::getLeaveTime,leaveTime);
         if (StringUtils.isNotBlank(checkTime)){
-            DateTime checkDateTime = DateUtil.parseDate(checkTime);
-            if (checkDateTime.getHours()>9){
+            Setting workTime = settingService.lambdaQuery().eq(Setting::getSettingName, "workTime").one();
+            String workTimeSettingValue = workTime.getSettingValue();
+            DateTime checkDateTime = DateUtil.parse(checkTime);
+            DateTime workTimeSetting = DateUtil.parse(workTimeSettingValue, "HH:mm");
+            if (checkDateTime.getHours()>workTimeSetting.getHours()){
                 lambdaUpdate.set(CheckInfo::getIsLate, true);
-            }else {
+            }else if (checkDateTime.getHours()==workTimeSetting.getHours()){
+                if (checkDateTime.getMinutes()>workTimeSetting.getMinutes()){
+                    lambdaUpdate.set(CheckInfo::getIsLate, true);
+                }else{
+                    lambdaUpdate.set(CheckInfo::getIsLate, false);
+                }
+            }else{
                 lambdaUpdate.set(CheckInfo::getIsLate, false);
             }
         }
         if (StringUtils.isNotBlank(leaveTime)){
-            DateTime leaveDateTime = DateUtil.parseDate(leaveTime);
-            if (leaveDateTime.getHours()<21){
+            Setting workTime = settingService.lambdaQuery().eq(Setting::getSettingName, "closingTime").one();
+            String closingTimeSettingValue = workTime.getSettingValue();
+            DateTime leaveDateTime = DateUtil.parse(leaveTime);
+            DateTime closingTimeSetting = DateUtil.parse(closingTimeSettingValue, "HH:mm");
+            if (leaveDateTime.getHours()<closingTimeSetting.getHours()){
                 lambdaUpdate.set(CheckInfo::getIsLeaveEarly, true);
-            }else {
+            }else if (leaveDateTime.getHours()==closingTimeSetting.getHours()){
+                if (leaveDateTime.getMinutes()<closingTimeSetting.getMinutes()){
+                    lambdaUpdate.set(CheckInfo::getIsLeaveEarly, true);
+                }else{
+                    lambdaUpdate.set(CheckInfo::getIsLeaveEarly, false);
+                }
+            }else{
                 lambdaUpdate.set(CheckInfo::getIsLeaveEarly, false);
             }
         }

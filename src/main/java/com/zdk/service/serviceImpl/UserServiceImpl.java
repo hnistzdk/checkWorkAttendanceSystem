@@ -79,7 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public ApiResponse changeState(ChangeStateDto changeStateDto) {
-        return ApiResponse.result(lambdaUpdate().eq(User::getId, changeStateDto.getId()).set(User::getState, !changeStateDto.getState()).update(),"更新状态成功","更新状态失败");
+        return ApiResponse.result(lambdaUpdate().eq(User::getId, changeStateDto.getId()).set(User::getState, changeStateDto.getState()).update(),"更新状态成功","更新状态失败");
     }
 
     @Override

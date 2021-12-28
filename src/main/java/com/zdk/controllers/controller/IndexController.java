@@ -53,7 +53,7 @@ public class IndexController extends BaseController {
                     "    },\n" +
                     "    {\n" +
                     "      \"id\": 150,\n" +
-                    "      \"authName\": \"个人中心\",\n" +
+                    "      \"authName\": \"系统管理\",\n" +
                     "      \"path\": \"center\",\n" +
                     "      \"children\": [\n" +
                     "        {\n" +
@@ -135,6 +135,13 @@ public class IndexController extends BaseController {
                     "          \"path\": \"center\",\n" +
                     "          \"children\": [],\n" +
                     "          \"order\": null\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "          \"id\": 152,\n" +
+                    "          \"authName\": \"系统设置\",\n" +
+                    "          \"path\": \"systemSetting\",\n" +
+                    "          \"children\": [],\n" +
+                    "          \"order\": null\n" +
                     "        }\n" +
                     "      ],\n" +
                     "      \"order\": 7\n" +
@@ -142,7 +149,8 @@ public class IndexController extends BaseController {
                     "  ],\n" +
                     "  \"msg\": \"获取菜单列表成功\",\n" +
                     "   \"status\": 200\n" +
-                    "}\n";
+                    "}\n" +
+                    "\n";
         }
         return ApiResponse.success(menu, "菜单获取成功");
     }
