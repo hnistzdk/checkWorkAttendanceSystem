@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.zdk.model.User;
 import com.zdk.model.dto.AddUserDto;
 import com.zdk.model.dto.PageDto;
+import com.zdk.model.dto.PermissionDistributeDto;
 import com.zdk.model.dto.UpdateUserDto;
 import com.zdk.utils.ApiResponse;
 
@@ -35,5 +36,12 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     ApiResponse updateRole(Role role);
+
+    /**
+     * 分配权限
+     * @param permissionDistributeDto
+     * @return
+     */
+    ApiResponse permissionDistribute(PermissionDistributeDto permissionDistributeDto);
 
 }

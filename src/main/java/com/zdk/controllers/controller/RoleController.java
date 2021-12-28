@@ -42,7 +42,7 @@ public class RoleController extends BaseController {
     @ApiOperation("添加角色接口")
     @PermissionInfo
     @PostMapping("/add")
-    public ApiResponse addUser(@RequestBody Role role){
+    public ApiResponse addRole(@RequestBody Role role){
         if (notOk(role)){
             return ApiResponse.fail("参数错误");
         }
@@ -52,17 +52,27 @@ public class RoleController extends BaseController {
     @ApiOperation("修改角色信息接口")
     @PermissionInfo
     @PostMapping("/update")
-    public ApiResponse updateUser(@RequestBody Role role){
+    public ApiResponse updateRole(@RequestBody Role role){
         if (notOk(role)){
             return ApiResponse.fail("参数错误");
         }
         return roleService.updateRole(role);
     }
 
+    @ApiOperation("获取角色信息")
+    @PermissionInfo
+    @PostMapping("/edit/{id}")
+    public ApiResponse editRole(@PathVariable Integer id){
+        if (notOk(id)){
+            return ApiResponse.fail("参数错误");
+        }
+        return ApiResponse.success(roleService.getById(id));
+    }
+
     @ApiOperation("删除角色信息接口")
     @PermissionInfo
     @PostMapping("/delete/{id}")
-    public ApiResponse deleteUser(@PathVariable Integer id){
+    public ApiResponse deleteRole(@PathVariable Integer id){
         if (notOk(id)){
             return ApiResponse.fail("参数错误");
         }

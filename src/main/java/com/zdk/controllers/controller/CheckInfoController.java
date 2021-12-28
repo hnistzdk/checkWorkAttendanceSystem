@@ -1,13 +1,12 @@
 package com.zdk.controllers.controller;
 
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.zdk.controllers.BaseController;
 import com.zdk.interceptor.PermissionInfo;
 import com.zdk.model.CheckInfo;
-import com.zdk.model.User;
+import com.zdk.model.dto.ClockInDto;
 import com.zdk.model.dto.PageDto;
 import com.zdk.service.CheckInfoService;
 import com.zdk.utils.ApiResponse;
@@ -42,5 +41,13 @@ public class CheckInfoController extends BaseController {
         data.set("date", pageDto.getDate());
         return ApiResponse.success(data);
     }
+
+    @ApiOperation("打卡接口")
+    @PermissionInfo
+    @PostMapping("/clockIn")
+    public ApiResponse clockIn(@RequestBody ClockInDto clockInDto){
+        return checkInfoService.clockIn(clockInDto);
+    }
+
 }
 

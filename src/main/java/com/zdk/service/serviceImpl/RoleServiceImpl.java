@@ -7,6 +7,7 @@ import com.zdk.model.Role;
 import com.zdk.mapper.RoleMapper;
 import com.zdk.model.User;
 import com.zdk.model.dto.PageDto;
+import com.zdk.model.dto.PermissionDistributeDto;
 import com.zdk.service.RoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zdk.utils.ApiResponse;
@@ -56,5 +57,17 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 .set(Role::getRoleDescription, role.getRoleDescription())
                 .set(Role::getPermissionId, role.getPermissionId()).update();
         return ApiResponse.result(update,"更新角色信息成功","更新角色信息失败");
+    }
+
+    @Override
+    public ApiResponse permissionDistribute(PermissionDistributeDto permissionDistributeDto) {
+        Integer id = permissionDistributeDto.getId();
+        if (id == null){
+            return ApiResponse.fail("角色id不能为空");
+        }
+        boolean update = lambdaUpdate().eq(Role::getId, id)
+                .set(Role::getPermissionId, permissionDistributeDto.getPermissionIds())
+                .update();
+        return ApiResponse.result(update,"更新权限成功","更新权限失败");
     }
 }

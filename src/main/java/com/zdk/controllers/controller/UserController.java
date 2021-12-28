@@ -124,8 +124,8 @@ public class UserController extends BaseController {
     @ApiOperation("重置密码接口")
     @PermissionInfo
     @PostMapping("/resetPwd")
-    public ApiResponse resetPwd(@RequestBody PwdDto PwdDto){
-        return null;
+    public ApiResponse resetPwd(@RequestBody PwdDto pwdDto){
+        return userService.resetPwd(pwdDto);
     }
 }
 
