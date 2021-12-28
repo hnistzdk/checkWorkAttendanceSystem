@@ -89,4 +89,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return apiResponse;
     }
+
+    @Override
+    public ApiResponse resetPwd(PwdDto pwdDto) {
+        Integer id = pwdDto.getId();
+        if (pwdDto == null || id == null){
+            return ApiResponse.fail("参数错误");
+        }
+        String oldPassword = pwdDto.getOldPassword();
+        String newPassword = pwdDto.getNewPassword();
+        if (StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPassword)){
+            return ApiResponse.fail("密码不能为空");
+        }
+        User user = getById(id);
+        if (!user.getPassword().equals(HashKit.md5(oldPassword))){
+            return ApiResponse.fail("旧密码错误");
+        }
+        boolean update = lambdaUpdate().eq(User::getId, pwdDto.getId())
+                .set(User::getPassword, HashKit.md5(pwdDto.getNewPassword())).update();
+        return ApiResponse.result(update,"重置成功","重置失败");
+    }
 }

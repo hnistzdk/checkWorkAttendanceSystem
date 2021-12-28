@@ -9,6 +9,7 @@ import com.zdk.model.Role;
 import com.zdk.model.dto.PageDto;
 import com.zdk.service.PermissionService;
 import com.zdk.utils.ApiResponse;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author zdk
  * @since 2021-12-25
  */
+@Api("权限模块")
 @RestController
 @RequestMapping("/permission")
 public class PermissionController extends BaseController {

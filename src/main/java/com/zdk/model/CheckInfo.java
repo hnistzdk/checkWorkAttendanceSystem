@@ -51,6 +51,11 @@ public class CheckInfo implements Serializable {
     private String leaveTime;
 
     /**
+     * 这条打卡信息属于的日期
+     */
+    private String infoTime;
+
+    /**
      * 是否迟到
      */
     private Boolean isLate;

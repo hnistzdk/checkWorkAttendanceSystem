@@ -18,4 +18,9 @@ public interface CheckInfoService extends IService<CheckInfo> {
      * @return
      */
     PageInfo<CheckInfo> getCheckInfoPage(PageDto pageDto, User loginUser);
+
+    /**
+     * 生成考勤初始数据
+     */
+    void generateCheckInfo();
 }

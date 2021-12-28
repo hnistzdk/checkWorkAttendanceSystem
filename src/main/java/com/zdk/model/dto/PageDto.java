@@ -22,7 +22,6 @@ public class PageDto implements Serializable {
     private Integer pageNumber;
     @NotNull
     private Integer pageSize;
-    @NotBlank
     private String keywords;
     private String date;
 }

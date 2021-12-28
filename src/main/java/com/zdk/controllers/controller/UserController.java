@@ -9,6 +9,7 @@ import com.zdk.model.dto.*;
 import com.zdk.service.UserService;
 import com.zdk.utils.ApiResponse;
 import com.zdk.utils.HashKit;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +20,12 @@ import org.springframework.web.bind.annotation.*;
  * @author zdk
  * @since 2021-12-25
  */
+@Api("用户模块")
 @RestController
 @RequestMapping("/user")
 @CrossOrigin
 public class UserController extends BaseController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
-
-
     @Autowired
     private UserService userService;
 
@@ -121,5 +121,11 @@ public class UserController extends BaseController {
         return userService.register(registerDto);
     }
 
+    @ApiOperation("重置密码接口")
+    @PermissionInfo
+    @PostMapping("/resetPwd")
+    public ApiResponse resetPwd(@RequestBody PwdDto PwdDto){
+        return null;
+    }
 }
 

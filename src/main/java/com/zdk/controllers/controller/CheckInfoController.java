@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.zdk.controllers.BaseController;
+import com.zdk.interceptor.PermissionInfo;
 import com.zdk.model.CheckInfo;
 import com.zdk.model.User;
 import com.zdk.model.dto.PageDto;
@@ -32,6 +33,7 @@ public class CheckInfoController extends BaseController {
     private CheckInfoService checkInfoService;
 
     @ApiOperation("考勤信息列表")
+    @PermissionInfo
     @GetMapping("/list")
     public ApiResponse checkInfoList(PageDto pageDto){
         PageInfo<CheckInfo> checkInfoList = checkInfoService.getCheckInfoPage(pageDto,getLoginUser());

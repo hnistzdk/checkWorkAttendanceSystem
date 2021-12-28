@@ -54,4 +54,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     ApiResponse register(AddUserDto registerDto);
+
+    /**
+     * 重置密码
+     * @param pwdDto
+     * @return
+     */
+    ApiResponse resetPwd(PwdDto pwdDto);
 }
