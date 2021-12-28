@@ -28,8 +28,19 @@ public class ScheduledTask {
      * 星期（Day of Week）	1~7的整数或者 SUN-SAT （1=SUN）	, - * ? / L C #     八个字符
      * 年(可选，留空)（Year）	1970~2099	, - * /    四个字符
      */
-    @Scheduled(cron = "0 31 14 * * *")
+    /**
+     * 每天0点 执行生成考勤初始信息
+     */
+    @Scheduled(cron = "0 0 0 * * *")
     public void generateCheckInfo(){
         checkInfoService.generateCheckInfo();
+    }
+
+    /**
+     * 每天0点5分确认缺勤状态
+     */
+    @Scheduled(cron = "0 0 3 * * *")
+    public void checkAbsent(){
+        checkInfoService.checkAbsent();
     }
 }

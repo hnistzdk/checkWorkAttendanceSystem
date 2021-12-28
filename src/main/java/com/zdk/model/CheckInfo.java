@@ -65,5 +65,9 @@ public class CheckInfo implements Serializable {
      */
     private Boolean isLeaveEarly;
 
+    /**
+     * 是否缺勤
+     */
+    private Boolean absent;
 
 }

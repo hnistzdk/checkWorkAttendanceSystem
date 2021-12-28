@@ -43,12 +43,12 @@ public class CheckInfoServiceImpl extends ServiceImpl<CheckInfoMapper, CheckInfo
         }
         if (loginUser != null){
             checkInfoList = lambdaQuery().eq("普通用户".equals(loginUser.getRole()),CheckInfo::getStaffId,loginUser.getId())
-                    .like(CheckInfo::getInfoTime,pageDto.getDate().substring(0, 11).trim())
+                    .like(CheckInfo::getInfoTime,pageDto.getDate().substring(0, 10).trim())
                     .like(StringUtils.isNotBlank(keywords), CheckInfo::getStaffName, keywords)
                     .list();
         }else{
             checkInfoList = lambdaQuery()
-                    .like(CheckInfo::getInfoTime,pageDto.getDate().substring(0, 11).trim())
+                    .like(CheckInfo::getInfoTime,pageDto.getDate().substring(0, 10).trim())
                     .like(StringUtils.isNotBlank(keywords), CheckInfo::getStaffName, keywords)
                     .list();
         }
@@ -63,7 +63,8 @@ public class CheckInfoServiceImpl extends ServiceImpl<CheckInfoMapper, CheckInfo
             CheckInfo checkInfo = new CheckInfo();
             checkInfo.setStaffId(user.getId())
                     .setStaffName(user.getTrueName())
-                    .setInfoTime(DateUtil.now());
+                    .setInfoTime(DateUtil.now())
+                    .setAbsent(false);
             checkInfoList.add(checkInfo);
         }
         boolean saveBatch = saveBatch(checkInfoList);
@@ -71,7 +72,7 @@ public class CheckInfoServiceImpl extends ServiceImpl<CheckInfoMapper, CheckInfo
     }
 
     @Override
-    public ApiResponse clockIn(ClockInDto clockInDto) {
+    public ApiResponse adminClockIn(ClockInDto clockInDto) {
         if (clockInDto==null || clockInDto.getId()==null){
             return ApiResponse.fail("参数错误");
         }
@@ -99,5 +100,57 @@ public class CheckInfoServiceImpl extends ServiceImpl<CheckInfoMapper, CheckInfo
         }
         boolean update = lambdaUpdate.update();
         return ApiResponse.result(update, "打卡成功", "打卡失败");
+    }
+
+    @Override
+    public ApiResponse clockIn(ClockInDto clockInDto) {
+        if (clockInDto==null || clockInDto.getId()==null){
+            return ApiResponse.fail("参数错误");
+        }
+        String checkTime = clockInDto.getCheckTime();
+        String leaveTime = clockInDto.getLeaveTime();
+        LambdaUpdateChainWrapper<CheckInfo> lambdaUpdate = lambdaUpdate().eq(CheckInfo::getStaffId, clockInDto.getId());
+        lambdaUpdate
+                .set(StringUtils.isNotBlank(checkTime),CheckInfo::getCheckTime,checkTime)
+                .set(StringUtils.isNotBlank(leaveTime),CheckInfo::getLeaveTime,leaveTime);
+        if (StringUtils.isNotBlank(checkTime)){
+            DateTime checkDateTime = DateUtil.parseDate(checkTime);
+            if (checkDateTime.getHours()>9){
+                lambdaUpdate.set(CheckInfo::getIsLate, true);
+            }else {
+                lambdaUpdate.set(CheckInfo::getIsLate, false);
+            }
+        }
+        if (StringUtils.isNotBlank(leaveTime)){
+            DateTime leaveDateTime = DateUtil.parseDate(leaveTime);
+            if (leaveDateTime.getHours()<21){
+                lambdaUpdate.set(CheckInfo::getIsLeaveEarly, true);
+            }else {
+                lambdaUpdate.set(CheckInfo::getIsLeaveEarly, false);
+            }
+        }
+        boolean update = lambdaUpdate.update();
+        return ApiResponse.result(update, "打卡成功", "打卡失败");
+    }
+
+    @Override
+    public ApiResponse getCheckInfoToday(Integer id) {
+        CheckInfo checkInfo = lambdaQuery().eq(CheckInfo::getStaffId, id)
+                .like(CheckInfo::getInfoTime, DateUtil.now().substring(0, 10).trim()).one();
+        return checkInfo==null ? ApiResponse.fail("没有记录") : ApiResponse.success(checkInfo);
+    }
+
+    @Override
+    public void checkAbsent() {
+        String yesterday = DateUtil.yesterday().toString().substring(0, 10);
+        List<CheckInfo> list = lambdaQuery().like(CheckInfo::getInfoTime, yesterday).list();
+        for (CheckInfo checkInfo : list) {
+            if (StringUtils.isBlank(checkInfo.getCheckTime())
+            &&StringUtils.isBlank(checkInfo.getLeaveTime())){
+                checkInfo.setAbsent(true);
+            }
+        }
+        boolean updateBatchById = updateBatchById(list);
+        log.debug("更新缺勤信息->"+updateBatchById);
     }
 }

@@ -1,6 +1,7 @@
 package com.zdk.controllers.controller;
 
 import com.zdk.controllers.BaseController;
+import com.zdk.interceptor.PermissionInfo;
 import com.zdk.model.User;
 import com.zdk.utils.ApiResponse;
 import com.zdk.utils.EmailUtil;
@@ -27,6 +28,7 @@ public class IndexController extends BaseController {
     private final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     @ApiOperation("获取菜单")
+    @PermissionInfo
     @GetMapping("/menus")
     public ApiResponse getMenuList() {
         String menu;
@@ -146,6 +148,7 @@ public class IndexController extends BaseController {
     }
 
     @ApiOperation("发送验证码")
+    @PermissionInfo
     @GetMapping("/verificationCode")
     public ApiResponse verificationCode(String email){
         if (notOk(email)){

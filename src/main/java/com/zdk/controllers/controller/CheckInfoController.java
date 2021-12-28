@@ -32,7 +32,7 @@ public class CheckInfoController extends BaseController {
     private CheckInfoService checkInfoService;
 
     @ApiOperation("考勤信息列表")
-    @PermissionInfo
+    @PermissionInfo("考勤信息列表")
     @GetMapping("/list")
     public ApiResponse checkInfoList(PageDto pageDto){
         PageInfo<CheckInfo> checkInfoList = checkInfoService.getCheckInfoPage(pageDto,getLoginUser());
@@ -42,12 +42,46 @@ public class CheckInfoController extends BaseController {
         return ApiResponse.success(data);
     }
 
-    @ApiOperation("打卡接口")
-    @PermissionInfo
+    @ApiOperation("员工打卡")
+    @PermissionInfo("员工打卡")
     @PostMapping("/clockIn")
     public ApiResponse clockIn(@RequestBody ClockInDto clockInDto){
         return checkInfoService.clockIn(clockInDto);
     }
 
+    @ApiOperation("管理员帮助打卡")
+    @PermissionInfo("管理员打卡")
+    @PostMapping("/adminClockIn")
+    public ApiResponse adminClockIn(@RequestBody ClockInDto clockInDto){
+        return checkInfoService.adminClockIn(clockInDto);
+    }
+
+    @ApiOperation("获取用户当天打卡信息")
+    @PermissionInfo("用户当天打卡信息")
+    @GetMapping("/{id}")
+    public ApiResponse getCheckInfo(@PathVariable Integer id){
+        if (notOk(id)){
+            return ApiResponse.fail("参数错误");
+        }
+        return checkInfoService.getCheckInfoToday(id);
+    }
+
+    @ApiOperation("删除打卡信息")
+    @PermissionInfo("删除打卡信息")
+    @GetMapping("/delete/{id}")
+    public ApiResponse deleteCheckInfo(@PathVariable Integer id){
+        if (notOk(id)){
+            return ApiResponse.fail("参数错误");
+        }
+        boolean remove = checkInfoService.removeById(id);
+        return ApiResponse.result(remove, "删除考勤信息成功", "删除考勤信息失败");
+    }
+
+    @ApiOperation("管理员修改打卡信息")
+    @PermissionInfo("修改打卡信息")
+    @PostMapping("/update")
+    public ApiResponse update(@RequestBody ClockInDto clockInDto){
+        return checkInfoService.adminClockIn(clockInDto);
+    }
 }
 

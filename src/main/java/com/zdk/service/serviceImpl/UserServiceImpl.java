@@ -34,6 +34,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!user.getState()){
             return ApiResponse.fail("该员工已离职或账号被禁用");
         }
+        if (user.getPassword().equals(password)){
+            return ApiResponse.success(user, "重新登录成功");
+        }
         if (!user.getPassword().equals(HashKit.md5(password))){
             return ApiResponse.fail("账号或密码错误");
         }

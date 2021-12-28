@@ -32,7 +32,7 @@ public class RoleController extends BaseController {
     private RoleService roleService;
 
     @ApiOperation("角色列表接口")
-    @PermissionInfo
+    @PermissionInfo("角色列表")
     @GetMapping("/list")
     public ApiResponse roleList(PageDto pageDto){
         PageInfo<Role> roleList = roleService.getRolePage(pageDto);
@@ -40,7 +40,7 @@ public class RoleController extends BaseController {
     }
 
     @ApiOperation("添加角色接口")
-    @PermissionInfo
+    @PermissionInfo("添加角色")
     @PostMapping("/add")
     public ApiResponse addRole(@RequestBody Role role){
         if (notOk(role)){
@@ -50,7 +50,7 @@ public class RoleController extends BaseController {
     }
 
     @ApiOperation("修改角色信息接口")
-    @PermissionInfo
+    @PermissionInfo("删除角色")
     @PostMapping("/update")
     public ApiResponse updateRole(@RequestBody Role role){
         if (notOk(role)){
@@ -60,7 +60,7 @@ public class RoleController extends BaseController {
     }
 
     @ApiOperation("获取角色信息")
-    @PermissionInfo
+    @PermissionInfo("角色信息")
     @PostMapping("/edit/{id}")
     public ApiResponse editRole(@PathVariable Integer id){
         if (notOk(id)){
@@ -70,7 +70,7 @@ public class RoleController extends BaseController {
     }
 
     @ApiOperation("删除角色信息接口")
-    @PermissionInfo
+    @PermissionInfo("删除角色")
     @PostMapping("/delete/{id}")
     public ApiResponse deleteRole(@PathVariable Integer id){
         if (notOk(id)){

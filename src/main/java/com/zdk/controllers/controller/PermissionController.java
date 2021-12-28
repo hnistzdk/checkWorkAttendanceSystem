@@ -38,7 +38,7 @@ public class PermissionController extends BaseController {
     private RoleService roleService;
 
     @ApiOperation("权限列表接口")
-    @PermissionInfo
+    @PermissionInfo("权限列表")
     @GetMapping("/list")
     public ApiResponse roleList(PageDto pageDto){
         PageInfo<Permission> roleList = permissionService.getPermissionPage(pageDto);
@@ -46,7 +46,7 @@ public class PermissionController extends BaseController {
     }
 
     @ApiOperation("分配权限列表")
-    @PermissionInfo
+    @PermissionInfo("分配权限列表")
     @GetMapping("/distributeList/{id}")
     public ApiResponse distributeList(@PathVariable Integer id){
         Role role = roleService.getById(id);
@@ -71,9 +71,10 @@ public class PermissionController extends BaseController {
     }
 
     @ApiOperation("进行权限分配")
-    @PermissionInfo
+    @PermissionInfo("权限分配")
     @PostMapping("/distribute")
     public ApiResponse distribute(@RequestBody PermissionDistributeDto permissionDistributeDto){
+        logger.debug("数据->{}", permissionDistributeDto);
         return roleService.permissionDistribute(permissionDistributeDto);
     }
 }

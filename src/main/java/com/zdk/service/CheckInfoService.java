@@ -27,9 +27,28 @@ public interface CheckInfoService extends IService<CheckInfo> {
     void generateCheckInfo();
 
     /**
-     * 打卡
+     * 管理员帮助打卡
+     * @param clockInDto
+     * @return
+     */
+    ApiResponse adminClockIn(ClockInDto clockInDto);
+
+    /**
+     * 普通员工打卡
      * @param clockInDto
      * @return
      */
     ApiResponse clockIn(ClockInDto clockInDto);
+
+    /**
+     * 获取用户当天打卡信息
+     * @param id
+     * @return
+     */
+    ApiResponse getCheckInfoToday(Integer id);
+
+    /**
+     * 更新是否缺勤信息
+     */
+    void checkAbsent();
 }

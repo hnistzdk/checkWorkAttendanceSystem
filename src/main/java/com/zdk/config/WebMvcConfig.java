@@ -1,8 +1,12 @@
 package com.zdk.config;
 
+import com.zdk.interceptor.LoginInterceptor;
+import com.zdk.interceptor.PermissionInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -26,22 +30,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
         //一小时内不用再预先检测(发送OPTIONS请求)
     }
 
-//    @Autowired
-//    private RightInterceptor rightInterceptor;
-//
-//    @Autowired
-//    private LoginInterceptor loginInterceptor;
-//
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(rightInterceptor)
-//                .excludePathPatterns("/adminLogin","/primaryLogin","/enterpriseLogin","/sendCode/*","/menus")
-//                .excludePathPatterns("/enterpriseRegister","/enterprisePwdChange")
-//                .excludePathPatterns("/primaryRegister","/primaryPwdChange","/userInfo/**")
+    @Autowired
+    private PermissionInterceptor permissionInterceptor;
+
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(permissionInterceptor)
+//                .excludePathPatterns("/user/login","/user/register")
+//                .excludePathPatterns("/menus","/verificationCode")
 //                .excludePathPatterns("/swagger*/**", "/v2/**", "/webjars/**");
-//
-////        registry.addInterceptor(loginInterceptor).addPathPatterns("/**")
-////                .excludePathPatterns("/adminLogin","/primaryLogin","/enterpriseLogin","/sendCode/*","/menus")
-////                .excludePathPatterns("/swagger*/**", "/v2/**", "/webjars/**");
-//    }
+    }
 }

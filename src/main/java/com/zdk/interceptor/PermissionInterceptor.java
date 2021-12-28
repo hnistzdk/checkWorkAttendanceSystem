@@ -1,5 +1,6 @@
 package com.zdk.interceptor;
 
+import cn.hutool.json.JSONUtil;
 import com.zdk.model.Permission;
 import com.zdk.model.User;
 import com.zdk.utils.ApiResponse;
@@ -38,7 +39,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
                 if (methodAnnotation == null){
                     return true;
                 }
-                String value = handlerMethod.getMethodAnnotation(PermissionInfo.class).value();
+                String value = methodAnnotation.value();
                 logger.debug("用户要执行的操作-> {}",value);
                 boolean flag=false;
                 if(value.equals("")){
@@ -58,7 +59,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
             }
         }
         try {
-            response.getWriter().write(ApiResponse.failWidthDiyCode(403,"无权限访问").toString());
+            response.getWriter().write(JSONUtil.parseObj(ApiResponse.failWidthDiyCode(403,"无权访问")).toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -31,7 +31,7 @@ public class UserController extends BaseController {
 
 
     @ApiOperation("登录接口")
-    @PermissionInfo
+    @PermissionInfo("登录")
     @PostMapping("/login")
     public ApiResponse login(@RequestBody LoginDto loginDto){
         if (notOk(loginDto.getUsername())||notOk(loginDto.getPassword())){
@@ -48,7 +48,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("员工列表接口")
-    @PermissionInfo
+    @PermissionInfo("员工列表")
     @GetMapping("/list")
     public ApiResponse userList(PageDto pageDto){
         PageInfo<User> userList = userService.getUserPage(pageDto);
@@ -56,7 +56,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("添加员工接口")
-    @PermissionInfo
+    @PermissionInfo("添加员工")
     @PostMapping("/add")
     public ApiResponse addUser(@RequestBody AddUserDto addUserDto){
         if (notOk(addUserDto)){
@@ -66,7 +66,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("修改员工信息接口")
-    @PermissionInfo
+    @PermissionInfo("更新员工信息")
     @PostMapping("/update")
     public ApiResponse updateUser(@RequestBody UpdateUserDto updateUserDto){
         if (notOk(updateUserDto)){
@@ -76,7 +76,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("删除员工信息接口")
-    @PermissionInfo
+    @PermissionInfo("删除员工")
     @PostMapping("/delete/{id}")
     public ApiResponse deleteUser(@PathVariable Integer id){
         if (notOk(id)){
@@ -88,7 +88,7 @@ public class UserController extends BaseController {
 
 
     @ApiOperation("修改员工账号状态接口")
-    @PermissionInfo
+    @PermissionInfo("修改员工状态")
     @PostMapping("/changeState")
     public ApiResponse changeState(@RequestBody ChangeStateDto changeStateDto){
         if (notOk(changeStateDto)){
@@ -98,7 +98,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("返回指定员工信息接口")
-    @PermissionInfo
+    @PermissionInfo("员工信息")
     @GetMapping("/edit/{id}")
     public ApiResponse getUser(@PathVariable Integer id){
         if (notOk(id)){
@@ -112,7 +112,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("注册接口")
-    @PermissionInfo
+    @PermissionInfo("注册")
     @PostMapping("/register")
     public ApiResponse register(@RequestBody AddUserDto registerDto){
         if (notOk(registerDto)){
@@ -122,7 +122,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation("重置密码接口")
-    @PermissionInfo
+    @PermissionInfo("重置密码")
     @PostMapping("/resetPwd")
     public ApiResponse resetPwd(@RequestBody PwdDto pwdDto){
         return userService.resetPwd(pwdDto);
